@@ -46,9 +46,29 @@ function love.load()
 	player = { x = 0, y = 0 }
 	entities = list{}
 	hp = 3
+	win = false
+	entity_max = 5
 end
 
 function love.update(dt)
+	-- check for win condition
+	if #entities == entity_max then
+		has_won = true
+		for i, e in ipairs(entities) do
+			if e.entity.kind ~= 'mole' then
+				has_won = false
+				break
+			end
+		end
+		if has_won then
+			win = true
+		end
+	end
+
+	if win then
+		return
+	end
+
 	time = time + dt
 	spawn_timer = spawn_timer + dt
 
@@ -76,7 +96,7 @@ function love.update(dt)
 
 	if spawn_timer > 1 and math.random() < 0.1 then
 		local item = table.choose(_items)
-		if #entities == 5 then
+		if #entities == entity_max then
 			return
 		end
 		spawn_timer = 0
@@ -95,6 +115,11 @@ function love.update(dt)
 end
 
 function love.draw()
+	if win then
+		lg.print('win', 0, 0)
+		return
+	end
+
 	if hp == 0 then
 		lg.print('end', 0, 0)
 		return
