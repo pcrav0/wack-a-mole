@@ -200,6 +200,14 @@ function optional(parameter, default)
 	return parameter
 end
 
+function range(a, b)
+	local result = list{}
+	for i = b and a or 1, b and b or a do
+		table.insert(result, i)
+	end
+	return result
+end
+
 function table:tostring(seen, deep, i)
 	seen = optional(seen, {})
 	deep = optional(deep, 1)
@@ -266,7 +274,6 @@ function table:tostring(seen, deep, i)
 		end
 	)
 end
-
 
 function table:copy(deep, seen)
     seen = seen or {}

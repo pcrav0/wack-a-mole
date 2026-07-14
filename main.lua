@@ -17,6 +17,8 @@ function table:choose()
 end
 
 function love.load()
+	math.randomseed(os.time())
+
 	if HAMMER_MOUSE then
 		love.mouse.setVisible(false)
 	end
@@ -37,6 +39,7 @@ function love.load()
 	end
 
 	hammer = image_load('hammer.png')
+	grass = image_load('grass.png')
 	_items = list{
 		texture_box('mole', { x = 0.1, y = 0.2, w = 0.8, h = 0.8, }),
 		texture_box('bomb', { x = 0.1, y = 0.2, w = 0.8, h = 0.7, }),
@@ -48,6 +51,8 @@ function love.load()
 	hp = 3
 	win = false
 	entity_max = 5
+	rotation_ns = table.map(range(16), function() return math.random(0, 3) end)
+	rotation_table = table.map(range(0, 3), function(v) return v * math.pi end)
 end
 
 function love.update(dt)
@@ -115,6 +120,20 @@ function love.update(dt)
 end
 
 function love.draw()
+	do
+		a = entity_scale * 8
+
+		for i = 0, math.floor(lg.getWidth() / a) do
+			x = i * entity_scale * 8
+			for j = 0, math.floor(lg.getHeight() / a) do
+				y = j * entity_scale * 8
+				local rotation_n = rotation_ns[(i + j) % #rotation_ns + 1]
+				local rotation = rotation_table[(rotation_n + i + j) % #rotation_table + 1]
+				lg.draw(grass, x, y + a / 2, rotation, entity_scale, entity_scale, grass:getWidth() / 2, grass:getHeight() / 2)
+			end
+		end
+	end
+
 	if win then
 		lg.print('win', 0, 0)
 		return
