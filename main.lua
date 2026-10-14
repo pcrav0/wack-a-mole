@@ -147,13 +147,15 @@ function love.draw()
 	lg.print(hp, 0, 0)
 
 	for i, e in ipairs(entities) do
-		lg.rectangle(
-			'line',
-			e.x + e.entity.x,
-			e.y + e.entity.y,
-			e.entity.w,
-			e.entity.h
-		)
+		if false then
+			lg.rectangle(
+				'line',
+				e.x + e.entity.x,
+				e.y + e.entity.y,
+				e.entity.w,
+				e.entity.h
+			)
+		end
 
 		lg.draw(e.entity.texture, e.x, e.y, 0, entity_scale, entity_scale)
 	end
